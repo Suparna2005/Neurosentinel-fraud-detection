@@ -1,7 +1,6 @@
 import os
-import pandas as pd
+import csv
 import random
-import numpy as np
 
 DATA_PATH = os.path.join(os.path.dirname(__file__), '..', 'data', 'creditcard.csv')
 
@@ -14,23 +13,34 @@ def get_random_transaction(tx_type='legitimate'):
         return _generate_dummy_transaction(tx_type)
         
     try:
-        df = pd.read_csv(DATA_PATH)
-        # Class 1 is fraud, Class 0 is legitimate
-        target_class = 1 if tx_type == 'fraud' else 0
-        df_filtered = df[df['Class'] == target_class]
+        target_class = '1' if tx_type == 'fraud' else '0'
+        matching_rows = []
         
-        if df_filtered.empty:
+        with open(DATA_PATH, mode='r', encoding='utf-8') as f:
+            reader = csv.reader(f)
+            header = next(reader)
+            
+            # Find indices dynamically
+            class_idx = header.index('Class') if 'Class' in header else len(header) - 1
+            v_indices = [header.index(f'V{i}') for i in range(1, 29)] if 'V1' in header else list(range(1, 29))
+            amount_idx = header.index('Amount') if 'Amount' in header else len(header) - 2
+            
+            for row in reader:
+                if len(row) > class_idx and row[class_idx] == target_class:
+                    matching_rows.append(row)
+                    
+        if not matching_rows:
             return _generate_dummy_transaction(tx_type)
             
-        sample = df_filtered.sample(1).iloc[0]
+        sample = random.choice(matching_rows)
         
         # Extract features V1-V28
-        features = [sample[f'V{i}'] for i in range(1, 29)]
-        amount = sample['Amount'] if 'Amount' in sample else random.uniform(5.0, 500.0)
+        features = [float(sample[i]) for i in v_indices]
+        amount = float(sample[amount_idx]) if amount_idx < len(sample) else random.uniform(5.0, 500.0)
         
         return {
             "features": features,
-            "amount": float(amount),
+            "amount": amount,
             "type": tx_type
         }
     except Exception as e:

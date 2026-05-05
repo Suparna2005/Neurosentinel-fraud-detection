@@ -17,11 +17,11 @@ except Exception as e:
     print(f"Warning: model.pkl not found or failed to load. Ensure you have trained the model. {e}")
     model = None
 
-@app.route('/', methods=['GET'])
+@app.route('/api/', methods=['GET'])
 def health_check():
     return jsonify({"status": "online", "model_loaded": model is not None}), 200
 
-@app.route('/sample-transaction', methods=['GET'])
+@app.route('/api/sample-transaction', methods=['GET'])
 def get_sample_transaction():
     try:
         tx_type = request.args.get('type', 'legitimate')
@@ -30,7 +30,7 @@ def get_sample_transaction():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route('/predict', methods=['POST'])
+@app.route('/api/predict', methods=['POST'])
 def predict():
     if model is None:
         return jsonify({"error": "Model is not loaded."}), 500

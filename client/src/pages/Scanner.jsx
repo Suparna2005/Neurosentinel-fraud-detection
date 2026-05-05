@@ -13,7 +13,7 @@ const Scanner = () => {
     setLoading(true);
     setResult(null);
     try {
-      const res = await axios.get(`http://localhost:5000/sample-transaction?type=${type}`);
+      const res = await axios.get(`/api/sample-transaction?type=${type}`);
       setTransaction(res.data);
     } catch (err) {
       console.error(err);
@@ -29,7 +29,7 @@ const Scanner = () => {
     setScanning(true);
     const startTime = performance.now();
     try {
-      const res = await axios.post('http://localhost:5000/predict', {
+      const res = await axios.post('/api/predict', {
         features: transaction.features
       });
       const endTime = performance.now();

@@ -8,7 +8,7 @@ const Dashboard = () => {
   useEffect(() => {
     const checkServer = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/');
+        const res = await axios.get('/api/');
         setHealth({
           status: res.data.status,
           model_loaded: res.data.model_loaded
