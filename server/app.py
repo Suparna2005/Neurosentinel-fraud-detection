@@ -18,10 +18,12 @@ except Exception as e:
     model = None
 
 @app.route('/api/', methods=['GET'])
+@app.route('/', methods=['GET'])
 def health_check():
     return jsonify({"status": "online", "model_loaded": model is not None}), 200
 
 @app.route('/api/sample-transaction', methods=['GET'])
+@app.route('/sample-transaction', methods=['GET'])
 def get_sample_transaction():
     try:
         tx_type = request.args.get('type', 'legitimate')
@@ -31,6 +33,7 @@ def get_sample_transaction():
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/predict', methods=['POST'])
+@app.route('/predict', methods=['POST'])
 def predict():
     if model is None:
         return jsonify({"error": "Model is not loaded."}), 500
