@@ -3,7 +3,7 @@ import pickle
 import numpy as np
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-import check_data
+from . import check_data
 
 app = Flask(__name__)
 CORS(app)
