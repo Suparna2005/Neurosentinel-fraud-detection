@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+.venv/
+server/.venv/
+__pycache__/
+*.pyc
+
+# Environment variables
+.env
+.env.local
+
+# Vercel
+.vercel/
+
+# MacOS
+.DS_Store
+
+# Build output
+dist/
+build/
+
+# Jupyter Notebooks checkpoints
+.ipynb_checkpoints/
